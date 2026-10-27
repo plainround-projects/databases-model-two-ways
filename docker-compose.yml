@@ -1,0 +1,25 @@
+# One PostgreSQL 18 for local use only.
+name: databases-model-two-ways
+
+services:
+  postgres:
+    image: postgres:18
+    # deadlock_timeout is how long a session waits on a lock before PostgreSQL looks for a deadlock (default 1s).
+    # Contenders racing for one item can deadlock on each other's uncommitted rows (see ARCHITECTURE.md); the
+    # lab checks sooner so the 20 races finish in seconds. It changes how fast a deadlock is found, not whether
+    # the exclusion constraint holds.
+    command: ["postgres", "-c", "deadlock_timeout=100ms"]
+    ports:
+      - "${POSTGRES_PORT:-5441}:5432"
+    environment:
+      # Credentials come from .env (make up copies .env.example the first time); none is written here.
+      POSTGRES_USER: ${POSTGRES_USER:-shop}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?copy .env.example to .env first}
+      POSTGRES_DB: ${POSTGRES_DB:-rentals}
+    healthcheck:
+      # -h 127.0.0.1: during first-start initialization the temporary server listens on the socket only, so a TCP
+      # check turns healthy only once the real server is up, and `make db` never races the restart.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
