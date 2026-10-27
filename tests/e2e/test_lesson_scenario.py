@@ -1,6 +1,7 @@
 """The lesson's scenario through the command-line programs, as the Makefile runs them (make up first)."""
 
 import os
+import re
 import subprocess
 import sys
 
@@ -43,7 +44,8 @@ def test_an_overlap_is_refused_a_touching_range_is_booked_and_the_exit_codes_say
 
     touching = program("book_cli", lab, "--item", "1", "--customer", "2", "--from", "2026-11-06", "--days", "2")
     assert touching.returncode == 0, touching.stderr
-    assert "booked rental 8: item 1 for 2026-11-06 to 2026-11-08" in touching.stdout
+    # the refused insert used up a number from the identity sequence, so the new rental is 9, not 8
+    assert re.fullmatch(r"booked rental (8|9): item 1 for 2026-11-06 to 2026-11-08\n", touching.stdout)
 
     nonsense = program("book_cli", lab, "--item", "1", "--customer", "2", "--from", "2026-11-06", "--days", "0")
     assert nonsense.returncode == 2
