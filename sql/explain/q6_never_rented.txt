@@ -1,0 +1,25 @@
+-- with the constraint and the lesson's indexes
+-- captured 2026-10-26 on 18.6 (Debian 18.6-1.pgdg13+2), 100,000 rentals, after ANALYZE
+-- source: sql/explain/q6_never_rented.sql
+
+                                                                           QUERY PLAN                                                                           
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=395.34..395.34 rows=1 width=12) (actual time=1128.383..1128.397 rows=0.00 loops=1)
+   Sort Key: i.item_id
+   Sort Method: quicksort  Memory: 25kB
+   Buffers: shared hit=3062
+   ->  Nested Loop Anti Join  (cost=0.28..395.33 rows=1 width=12) (actual time=1128.345..1128.346 rows=0.00 loops=1)
+         Buffers: shared hit=3059
+         ->  Seq Scan on items i  (cost=0.00..17.00 rows=1000 width=12) (actual time=0.437..9.193 rows=1000.00 loops=1)
+               Buffers: shared hit=7
+         ->  Index Only Scan using rentals_item_id_during_excl on rentals r  (cost=0.28..4.25 rows=100 width=4) (actual time=1.071..1.071 rows=1.00 loops=1000)
+               Index Cond: (item_id = i.item_id)
+               Heap Fetches: 0
+               Index Searches: 1000
+               Buffers: shared hit=3052
+ Planning:
+   Buffers: shared hit=192
+ Planning Time: 26.566 ms
+ Execution Time: 1128.543 ms
+(17 rows)
+

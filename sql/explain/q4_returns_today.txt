@@ -1,0 +1,36 @@
+-- with the constraint and the lesson's indexes
+-- captured 2026-10-26 on 18.6 (Debian 18.6-1.pgdg13+2), 100,000 rentals, after ANALYZE
+-- source: sql/explain/q4_returns_today.sql
+
+                                                                         QUERY PLAN                                                                         
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=125.73..127.99 rows=903 width=24) (actual time=92.911..92.955 rows=1000.00 loops=1)
+   Sort Key: r.rental_id
+   Sort Method: quicksort  Memory: 71kB
+   Buffers: shared hit=24
+   ->  Hash Join  (cost=45.04..81.40 rows=903 width=24) (actual time=62.061..79.677 rows=1000.00 loops=1)
+         Hash Cond: (r.customer_id = c.customer_id)
+         Buffers: shared hit=21
+         ->  Hash Join  (cost=29.79..63.76 rows=903 width=16) (actual time=56.759..74.154 rows=1000.00 loops=1)
+               Hash Cond: (r.item_id = i.item_id)
+               Buffers: shared hit=17
+               ->  Index Scan using rentals_return_day on rentals r  (cost=0.29..31.88 rows=903 width=12) (actual time=44.736..61.287 rows=1000.00 loops=1)
+                     Index Cond: (upper(during) = '2024-03-12'::date)
+                     Index Searches: 1
+                     Buffers: shared hit=10
+               ->  Hash  (cost=17.00..17.00 rows=1000 width=12) (actual time=11.927..11.928 rows=1000.00 loops=1)
+                     Buckets: 1024  Batches: 1  Memory Usage: 55kB
+                     Buffers: shared hit=7
+                     ->  Seq Scan on items i  (cost=0.00..17.00 rows=1000 width=12) (actual time=0.021..0.275 rows=1000.00 loops=1)
+                           Buffers: shared hit=7
+         ->  Hash  (cost=9.00..9.00 rows=500 width=16) (actual time=2.342..2.343 rows=500.00 loops=1)
+               Buckets: 1024  Batches: 1  Memory Usage: 33kB
+               Buffers: shared hit=4
+               ->  Seq Scan on customers c  (cost=0.00..9.00 rows=500 width=16) (actual time=0.327..1.219 rows=500.00 loops=1)
+                     Buffers: shared hit=4
+ Planning:
+   Buffers: shared hit=238 dirtied=2
+ Planning Time: 48.884 ms
+ Execution Time: 95.605 ms
+(28 rows)
+

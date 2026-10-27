@@ -1,0 +1,29 @@
+-- with the constraint and the lesson's indexes
+-- captured 2026-10-26 on 18.6 (Debian 18.6-1.pgdg13+2), 100,000 rentals, after ANALYZE
+-- source: sql/explain/q5_revenue_per_item_and_month.sql
+
+                                                               QUERY PLAN                                                               
+----------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=14847.21..19097.50 rows=100007 width=72) (actual time=6017.485..6287.371 rows=13007.00 loops=1)
+   Group Key: i.name, (to_char((lower(r.during))::timestamp with time zone, 'YYYY-MM'::text))
+   Buffers: shared hit=751, temp read=563 written=564
+   ->  Sort  (cost=14847.21..15097.22 rows=100007 width=59) (actual time=6014.477..6164.460 rows=100007.00 loops=1)
+         Sort Key: i.name, (to_char((lower(r.during))::timestamp with time zone, 'YYYY-MM'::text))
+         Sort Method: external merge  Disk: 4504kB
+         Buffers: shared hit=751, temp read=563 written=564
+         ->  Hash Join  (cost=29.50..2779.25 rows=100007 width=59) (actual time=95.772..1565.660 rows=100007.00 loops=1)
+               Hash Cond: (r.item_id = i.item_id)
+               Buffers: shared hit=748
+               ->  Seq Scan on rentals r  (cost=0.00..1736.07 rows=100007 width=18) (actual time=2.993..548.074 rows=100007.00 loops=1)
+                     Buffers: shared hit=736
+               ->  Hash  (cost=17.00..17.00 rows=1000 width=17) (actual time=19.624..19.637 rows=1000.00 loops=1)
+                     Buckets: 1024  Batches: 1  Memory Usage: 59kB
+                     Buffers: shared hit=7
+                     ->  Seq Scan on items i  (cost=0.00..17.00 rows=1000 width=17) (actual time=0.031..0.584 rows=1000.00 loops=1)
+                           Buffers: shared hit=7
+ Planning:
+   Buffers: shared hit=282 read=1
+ Planning Time: 121.974 ms
+ Execution Time: 6473.827 ms
+(21 rows)
+
