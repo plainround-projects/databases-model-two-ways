@@ -97,7 +97,7 @@ The lesson's race script inserts from 20 connections at once and expects one suc
 Captured on 100,000 rentals after `ANALYZE` ([results.md](sql/explain/results.md)):
 
 - **The availability check is an Index Only Scan, not an Index Scan**, on the constraint's GiST index, with `Heap Fetches: 0`. The lesson's expected output shows `Index Scan`; for a query that only asks `NOT EXISTS` the planner does not need the table.
-- **Before the constraint the same check is a sequential scan that stops at the first match** (`Rows Removed by Filter` is a few thousand of the 100,000, not all of them), because `EXISTS` ends at one row. The scan is cheap for an item that was rented early and expensive for one that is free, which is the case that matters.
+- **Before the constraint the same check is a sequential scan that stops at the first match** (`Rows Removed by Filter: 8782` of 100,007 rows, not all of them), because `EXISTS` ends at one row. The scan is cheap for an item that was rented early and expensive for one that is free, which is the case that matters.
 - **"Free next weekend" for every item is one pass over the index, not a probe per item**: a Hash Anti Join between the items and one index scan on the date range.
 - **The revenue report sorts 100,000 rows on disk** (`Sort Method: external merge`) because the group key is an expression and `work_mem` is 4 MB. At one report a day that is acceptable, and it is the plan that would change first if the report ran more often.
 - **"Never rented" is 1,000 index probes in a Nested Loop Anti Join**, not a scan of `rentals`.
