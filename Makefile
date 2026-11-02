@@ -16,7 +16,7 @@ export
         test test-integration test-e2e audit check docker-build psql down clean
 
 help: ## list the targets
-	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed -E 's/:.*## /\t/' | sort
+	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed -E 's/:.*## /\t/' | sort
 
 $(STAMP): requirements-dev.lock pyproject.toml
 	$(PYTHON) -m venv $(VENV)
@@ -73,7 +73,7 @@ report: $(STAMP) ## the five questions through the application code
 explain: db bulk ## step 6: write EXPLAIN (ANALYZE, BUFFERS) plans to sql/explain/*.txt
 	PSQL_CMD="$(PSQL)" ./scripts/capture_explain.sh
 
-run: db queries demo demo-documents db report race ## the whole lesson: build, query, refuse, race
+run: db queries demo demo-documents report race ## the whole lesson: build, query, refuse, race
 
 health: $(STAMP) ## exit 0 when PostgreSQL has the tables and the exclusion constraint
 	$(PY) -m rental_shop.interfaces.health_cli
