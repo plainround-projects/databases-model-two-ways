@@ -142,6 +142,7 @@ tests/
   integration/       the repository, the schema's rules, the race and the health probe against PostgreSQL.
   e2e/               the lesson's scenario through the command-line programs.
 docs/                ACCESS_PATTERNS.md, DOCUMENT_MODEL.md, adr/ (the database decides; two insert modes).
+tech/                one note per technology the repository uses, from zero, with every file quoted and explained (start with tech/README.md).
 scripts/             capture_explain.sh (the plans in sql/explain).
 docker-compose.yml   PostgreSQL 18.      Dockerfile  the programs as an image (non-root, health command as its check).
 pyproject.toml       project metadata and every tool's configuration (ruff, mypy, pytest, import-linter).
