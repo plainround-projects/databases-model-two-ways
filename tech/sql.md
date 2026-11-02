@@ -319,7 +319,7 @@ ANALYZE rentals;
 
 - `generate_series(3, 500) AS n` produces the numbers 3 to 500 as rows. `SELECT n, 'Customer ' || n` builds a name with the string joining operator `||`. `INSERT ... SELECT` inserts the rows a query returns. `ON CONFLICT DO NOTHING` skips a row whose key already exists, so rerunning is harmless.
 - Items 5 to 1000 get a rate `5 + n % 20`: `%` is the remainder after division, so rates run 5 to 24.
-- The rentals use `1000 + n` as the id, `1 + n % 1000` as item and `1 + n % 500` as customer. `n / 1000` is whole-number division (it drops the fraction), so rentals 1 to 999 share a start offset of 0 days, the next thousand 4 days later and so on. `DATE '2024-01-01' + 4` adds days to a date. Each rental is 3 days with a 1-day gap, so none overlap and the constraint can be added afterwards.
+- The rentals use `1000 + n` as the id, `1 + n % 1000` as item and `1 + n % 500` as customer. `n / 1000` is whole-number division (it drops the fraction), so rentals 1 to 999 share a start offset of 0 days, rentals 1,000 to 1,999 start 4 days later, rentals 2,000 to 2,999 start 8 days later, continuing in steps of 4 days up to the last rental, number 100,000, which starts 400 days after the first. `DATE '2024-01-01' + 4` adds days to a date. Each rental is 3 days with a 1-day gap, so none overlap and the constraint can be added afterwards.
 - The three `DO $$` lines reset the sequences, and the `ANALYZE` lines refresh statistics, for the same reasons as in the seed.
 
 ### `document_model/001_documents.sql`

@@ -37,7 +37,7 @@ disallow_untyped_calls = false
 ```
 
 - `python_version = "3.12"` is the version to assume.
-- `strict = true` switches on all the optional strict checks at once: every function must be fully annotated (`disallow_untyped_defs`), calls into untyped code are reported, `Any` is not allowed to leak, unused ignores are flagged, and more.
+- `strict = true` switches on all of these checks at once: `disallow_any_generics` (a generic type such as `list` must say what it holds), `disallow_subclassing_any` (no inheriting from an untyped class), `disallow_untyped_calls`, `disallow_untyped_defs` (every function must be fully annotated), `disallow_incomplete_defs`, `check_untyped_defs`, `disallow_untyped_decorators`, `warn_redundant_casts`, `warn_unused_ignores` (a `# type: ignore` that is no longer needed is flagged), `warn_return_any` (returning a value of type `Any` from a typed function is flagged), `no_implicit_reexport` (an import is private unless re-exported on purpose), `strict_equality` (comparing values of types that can never be equal is flagged) and `extra_checks`.
 - `files = ["src", "tests"]` is what a bare `mypy` command checks.
 - The comment above the override states the reasoning: test functions are named for the behavior they check; annotating every one adds noise, not safety. `[[tool.mypy.overrides]]` starts an override for the modules matching `tests.*`. The three `false` lines turn off the three checks that demand annotations on test functions.
 

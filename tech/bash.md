@@ -93,7 +93,7 @@ capture() { # capture <query-file> <output-file> <label>
 - `echo "-- $3"` prints the label as a SQL comment (`--` starts a comment in SQL), so the plan file stays valid SQL-looking text with a self-explaining header.
 - Line 15 builds the second header line from three pieces. `$(date -u +%Y-%m-%d)` prints today's date in UTC (`-u`) as year-month-day. `$($PSQL_CMD -At -c 'SHOW server_version' | head -1)` runs `psql` with `-A` (unaligned output), `-t` (tuples only: no headers or row counts) and `-c` (run this one command), asks the server for its version, and keeps only the first line with `head -1`. Writing the version into the file records what PostgreSQL produced the plan.
 - `echo` with nothing after it (line 17) prints an empty line to separate the header from the plan.
-- Line 18, `$PSQL_CMD < "$1"`, runs the stored command with the query file connected to its standard input. The variable is deliberately **not** quoted, so Bash splits it into words (`docker`, `compose`, `exec` and so on), which is how a command stored in a variable is run.
+- Line 18, `$PSQL_CMD < "$1"`, runs the stored command with the query file connected to its standard input. The variable is deliberately **not** quoted, so Bash splits it into words (`docker`, `compose`, `exec`, `-T`, `postgres`, `psql`, `-U`, `shop`, `-d`, `rentals`, `-q`), which is how a command stored in a variable is run.
 - Line 20 prints `wrote <file>` so the person watching the terminal sees progress.
 
 ### Warm-up and the "before" capture
