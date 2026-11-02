@@ -2,6 +2,16 @@
 
 All notable changes to this project are recorded here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `tech/`: one note per technology the repository uses, from zero, with every source file quoted and explained (start with `tech/README.md`).
+
+### Fixed
+
+- `make help` printed the file name instead of the target name when `.env` was read; `make run` no longer lists `db` twice (Make runs a target once per invocation).
+
 ## [0.1.0] - 2026-10-26
 
 ### Added
