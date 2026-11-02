@@ -111,6 +111,18 @@ One line on standard error: `ts=... level=INFO logger=demo msg="hello world" att
 .venv/bin/python -m pytest tests/unit/infrastructure/test_logging_and_shutdown.py -q
 ```
 
+```bash
+.venv/bin/python -c "
+import logging
+from rental_shop.infrastructure.logging import configure_logging
+configure_logging('INFO')
+try:
+    1 / 0
+except ZeroDivisionError:
+    logging.getLogger('demo').exception('failed')"
+```
+One line ending with `exc="Traceback (most recent call last): ..."`: the traceback is attached to the record as one quoted value.
+
 ## Mistakes people make
 
 - **Building the message with an f-string** in the logging call; `%d` style arguments avoid work when the level is off.

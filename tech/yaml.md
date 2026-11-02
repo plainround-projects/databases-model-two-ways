@@ -47,6 +47,11 @@ awk '/\t/ {print FILENAME": tab on line "NR}' docker-compose.yml .github/workflo
 ```
 Prints nothing but `checked`: neither file contains a tab character.
 
+```bash
+python3 -c "print(open('docker-compose.yml').read().count(chr(9)))"
+```
+Prints `0`: the Compose file contains no tab character (`chr(9)` is the tab).
+
 ## Mistakes people make
 
 - **Tabs for indentation**: a parse error. `.editorconfig` sets two spaces for YAML.
