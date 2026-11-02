@@ -680,7 +680,7 @@ def test_sigterm_sets_the_flag_once_installed():
             signal.signal(number, handler)
 ```
 
-`io.StringIO()` is an in-memory text file, passed as the log stream so the test can read what was written. The tests check: one record becomes one logfmt line with `ts=`, level, logger, quoted message and fields (the list `[0, 1]` is quoted because it contains spaces); a record below the level is dropped; an exception adds `exc=`; configuring twice does not duplicate lines. The shutdown tests check that the flag starts unset and is set by `request()`, and that after `install()` a real `SIGTERM` raised with `signal.raise_signal` sets it. The `previous` dictionary and the `finally` restore the old handlers so the test does not change the test runner's behaviour.
+`io.StringIO()` is an in-memory text file, passed as the log stream so the test can read what was written. The tests check: one record becomes one logfmt line with `ts=`, level, logger, quoted message and fields (the list `[0, 1]` is quoted because it contains spaces); a record below the level is dropped; an exception adds `exc=`; configuring twice does not duplicate lines. The shutdown tests check that the flag starts unset and is set by `request()`, and that after `install()` a real `SIGTERM` raised with `signal.raise_signal` sets it. The `previous` dictionary and the `finally` restore the old handlers so the test does not change the test runner's behavior.
 
 ```python
 import random

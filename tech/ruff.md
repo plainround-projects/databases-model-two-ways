@@ -6,7 +6,7 @@ ruff is a very fast tool that reads Python source and reports **lint** findings 
 
 ## Why this repository uses it
 
-Reviewers should read behaviour, not argue about style. `make lint` fails on a bug-prone pattern or on formatting that differs from the one standard, and `make format` fixes it automatically.
+Reviewers should read behavior, not argue about style. `make lint` fails on a bug-prone pattern or on formatting that differs from the one standard, and `make format` fixes it automatically.
 
 ## Where it appears
 
@@ -43,14 +43,14 @@ select = ["E", "F", "I", "B", "UP", "SIM", "N", "C4", "RUF", "PT", "D100", "D101
   - `F`: real mistakes found by static analysis (an unused import, an undefined name).
   - `I`: import order and grouping.
   - `B`: likely bugs (for example, a mutable default argument).
-  - `UP`: modernise old syntax to the target version.
+  - `UP`: modernize old syntax to the target version.
   - `SIM`: simplifiable code.
   - `N`: naming conventions (classes in `CapWords`, functions in `snake_case`).
   - `C4`: simpler comprehensions.
   - `RUF`: ruff's own rules.
   - `PT`: pytest style (for example, how fixtures and `raises` are written).
   - `D100`, `D101`, `D103`, `D104`: a docstring must exist on every module, public class, public function and package. Documentation is required in `src`.
-- `[tool.ruff.lint.per-file-ignores]` gives `"tests/**" = ["D"]`: no docstring rules in tests, whose function names state the behaviour.
+- `[tool.ruff.lint.per-file-ignores]` gives `"tests/**" = ["D"]`: no docstring rules in tests, whose function names state the behavior.
 
 ## Try it yourself
 
@@ -86,7 +86,7 @@ Shows `F401 os imported but unused` for a throwaway file outside the repository.
 2. What does `select = ["E", "F"]` mean? *Enable every rule starting with those letters.*
 3. Why does `src` matter for the `I` rules? *It tells which imports are first-party.*
 4. What does `--check` do? *Reports without changing files.*
-5. Why `D` is ignored in tests? *Test names state the behaviour; docstrings add noise.*
+5. Why `D` is ignored in tests? *Test names state the behavior; docstrings add noise.*
 
 ## Further reading
 

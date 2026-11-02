@@ -39,7 +39,7 @@ disallow_untyped_calls = false
 - `python_version = "3.12"` is the version to assume.
 - `strict = true` switches on all the optional strict checks at once: every function must be fully annotated (`disallow_untyped_defs`), calls into untyped code are reported, `Any` is not allowed to leak, unused ignores are flagged, and more.
 - `files = ["src", "tests"]` is what a bare `mypy` command checks.
-- The comment above the override states the reasoning: test functions are named for the behaviour they check; annotating every one adds noise, not safety. `[[tool.mypy.overrides]]` starts an override for the modules matching `tests.*`. The three `false` lines turn off the three checks that demand annotations on test functions.
+- The comment above the override states the reasoning: test functions are named for the behavior they check; annotating every one adds noise, not safety. `[[tool.mypy.overrides]]` starts an override for the modules matching `tests.*`. The three `false` lines turn off the three checks that demand annotations on test functions.
 
 The code relies on hints to pass strict mode: `assert row is not None` narrows `tuple | None` to `tuple`; the unreachable `raise AssertionError` at the end of the retry loops satisfies the "missing return" check; `Connection[Any]` marks rows of any shape.
 

@@ -43,7 +43,7 @@ source_modules = ["rental_shop.domain", "rental_shop.application"]
 forbidden_modules = ["psycopg"]
 ```
 
-- `root_package = "rental_shop"` is the package to analyse; `include_external_packages = true` allows `psycopg` to be named.
+- `root_package = "rental_shop"` is the package to analyze; `include_external_packages = true` allows `psycopg` to be named.
 - The first `[[tool.importlinter.contracts]]` is of type `layers` with four layers from top to bottom: interfaces, infrastructure, application, domain. Interfaces may import everything below; infrastructure may import application and domain; application may import only domain; domain imports none of the others. This is the dependency rule of ports-and-adapters.
 - The second contract is of type `forbidden`: the sources are `rental_shop.domain` and `rental_shop.application`, and the forbidden module is `psycopg`. Neither layer may reach the driver, even through another module. This is why `application/ports.py` declares `Protocol`s and the adapter implements them.
 
