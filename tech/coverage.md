@@ -70,5 +70,5 @@ Writes a browsable report and then removes it.
 
 ## Further reading
 
-- coverage 7.17: https://coverage.readthedocs.io/en/7.17.0/
-- pytest-cov 7.1: https://pytest-cov.readthedocs.io/en/v7.1.0/
+- coverage (docs for 7.17.0): https://coverage.readthedocs.io/en/7.17.0/
+- pytest-cov (latest docs; locked at 7.1.0): https://pytest-cov.readthedocs.io/en/latest/

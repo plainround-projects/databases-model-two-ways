@@ -1297,7 +1297,7 @@ Lists what would run, with the total count.
 
 ## Further reading
 
-- pytest 9.1 documentation: https://docs.pytest.org/en/9.1.x/
-- Fixtures: https://docs.pytest.org/en/9.1.x/how-to/fixtures.html
-- Parametrize: https://docs.pytest.org/en/9.1.x/how-to/parametrize.html
-- Markers: https://docs.pytest.org/en/9.1.x/how-to/mark.html
+- pytest documentation (stable docs; locked at 9.1.1): https://docs.pytest.org/en/stable/
+- Fixtures: https://docs.pytest.org/en/stable/how-to/fixtures.html
+- Parametrize: https://docs.pytest.org/en/stable/how-to/parametrize.html
+- Markers: https://docs.pytest.org/en/stable/how-to/mark.html

@@ -81,4 +81,4 @@ More detail about each contract.
 ## Further reading
 
 - import-linter 2.15: https://import-linter.readthedocs.io/en/v2.15/
-- Contract types: https://import-linter.readthedocs.io/en/v2.15/contract_types.html
+- Contract types: https://import-linter.readthedocs.io/en/v2.15/contract_types/
