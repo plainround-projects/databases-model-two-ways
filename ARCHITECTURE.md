@@ -24,6 +24,8 @@ The pattern is deliberately small. The lesson's subject is a rule that lives in 
 
 ## Data flow
 
+Drawn versions of this figure and of the walk-through: [the architecture](docs/diagrams/architecture.svg) and [one run](docs/diagrams/flow.svg).
+
 ```mermaid
 flowchart LR
     req["Booking requests<br/>book_cli, race_cli"]

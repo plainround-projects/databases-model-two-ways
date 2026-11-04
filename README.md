@@ -9,6 +9,24 @@ The data layer of a small equipment-rental shop, designed twice (as tables and a
 | **Level** | Beginner |
 | **Architecture** | [ARCHITECTURE.md](ARCHITECTURE.md), decisions: [docs/adr](docs/adr), access patterns: [docs/ACCESS_PATTERNS.md](docs/ACCESS_PATTERNS.md), the document design: [docs/DOCUMENT_MODEL.md](docs/DOCUMENT_MODEL.md) |
 
+## Architecture
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/architecture-dark.svg">
+  <img alt="Booking requests reach the Rentals table through the BookItem use case and the PostgresRentals adapter, and the table's exclusion constraint refuses overlapping dates. The same domain as JSONB documents, with bookings embedded twice, has nothing to stop a double booking." src="docs/diagrams/architecture.svg">
+</picture>
+
+Notice that BookItem contains no availability check: the only guard is the constraint on Rentals, and the document model has none.
+
+## How one run flows
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/flow-dark.svg">
+  <img alt="A booking is one INSERT ... ON CONFLICT DO NOTHING; the constraint probes its index and, for overlapping dates, nothing is inserted and the program exits 3. A free period inserts and exits 0. The amber row is the refusal, SQLSTATE 23P01." src="docs/diagrams/flow.svg">
+</picture>
+
+The run shows the same statement succeeding or failing only because of what the database holds; the amber row is the overlap refusal.
+
 ## Prerequisites
 
 | Tool | Version | Used for |

@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="t d">
+<title id="t">The rental shop modeled as tables and as documents</title>
+<desc id="d">Booking requests from book_cli and race_cli go through the BookItem use case and the PostgresRentals adapter into the Rentals table in PostgreSQL, which has an exclusion constraint on item and dates. Rentals refer to Items and Customers. In amber, an overlapping booking is refused with SQLSTATE 23P01. In the document model, the item document and the customer document each embed a copy of the bookings, and nothing guards a double booking.</desc>
+<style>
+:root{--paper:#0d1117;--ink:#f5f4f8;--mute:#9a96ab;--accent:#6ec8ff;--good:#7ce0a1;--warn:#ffd166}
+text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;fill:var(--ink)}
+.title{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:36px}
+.caption{font-size:16px;fill:var(--mute)}
+.name{font-size:20px;font-weight:600}
+.lane{font-size:17px;font-weight:600}
+.sub{font-size:15px;fill:var(--mute)}
+.label{font-size:15px}
+.tag{font-size:15px;fill:var(--mute)}
+.num{font-size:15px;font-weight:700;fill:var(--paper)}
+.legend{font-size:14px;fill:var(--mute)}
+.t-accent{fill:var(--accent)}
+.t-good{fill:var(--good)}
+.t-warn{fill:var(--warn)}
+.t-ink{fill:var(--ink)}
+.b{font-weight:600}
+.paper{fill:var(--paper);stroke:var(--mute);stroke-opacity:.3}
+.grid{fill:url(#grid)}
+.boundary{fill:var(--mute);fill-opacity:.035;stroke:var(--mute);stroke-opacity:.7;stroke-dasharray:6 5}
+.svc{fill:var(--accent);fill-opacity:.08;stroke:var(--accent);stroke-width:1.25}
+.store{fill:var(--mute);fill-opacity:.1;stroke:var(--mute);stroke-width:1.25}
+.rim{fill:none;stroke:var(--mute);stroke-width:1.25}
+.actor{fill:none;stroke:var(--mute);stroke-width:1.25}
+.slot{fill:var(--accent);fill-opacity:.14;stroke:var(--accent);stroke-width:1}
+.note{fill:var(--warn);fill-opacity:.09;stroke:var(--warn);stroke-width:1}
+.win{fill:var(--good);fill-opacity:.09;stroke:var(--good);stroke-width:1}
+.hair{fill:none;stroke:var(--mute);stroke-opacity:.4;stroke-width:1}
+.zone{fill:var(--accent);fill-opacity:.045;stroke:var(--accent);stroke-width:1.25;stroke-dasharray:6 5}
+.stop{fill:none;stroke:var(--warn);stroke-width:4;stroke-linecap:round}
+.mask{fill:var(--paper)}
+.sync,.async,.read,.fail,.ok{fill:none}
+.sync{stroke:var(--accent);stroke-width:1.75;marker-end:url(#a-sync)}
+.async{stroke:var(--accent);stroke-width:1.75;stroke-dasharray:8 6;marker-end:url(#a-async)}
+.read{stroke:var(--mute);stroke-width:1.75;stroke-linecap:round;stroke-dasharray:1 6;marker-end:url(#a-read)}
+.fail{stroke:var(--warn);stroke-width:2;marker-end:url(#a-fail)}
+.ok{stroke:var(--good);stroke-width:1.75;marker-end:url(#a-ok)}
+.dot{fill:var(--accent)}
+.dot-w{fill:var(--warn)}
+.dot-g{fill:var(--good)}
+.head-sync,.head-async{stroke:var(--accent)}
+.head-sync{fill:var(--accent)}
+.head-async,.head-read{fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.head-read{stroke:var(--mute)}
+.head-fail{fill:var(--warn)}
+.head-ok{fill:var(--good)}
+.gridline{fill:none;stroke:var(--mute);stroke-opacity:.09}
+</style>
+<defs>
+<pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path class="gridline" d="M40 0H0V40"/></pattern>
+<marker id="a-sync" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-sync" d="M0 0L10 5L0 10z"/></marker>
+<marker id="a-async" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-async" d="M1 1L9 5L1 9"/></marker>
+<marker id="a-read" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-read" d="M1 1L9 5L1 9"/></marker>
+<marker id="a-fail" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-fail" d="M0 0L10 5L0 10z"/></marker>
+<marker id="a-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path class="head-ok" d="M0 0L10 5L0 10z"/></marker>
+</defs>
+<rect class="paper" x="0.5" y="0.5" width="1199" height="899" rx="16"/>
+<rect class="grid" x="1" y="1" width="1198" height="898" rx="16"/>
+<text class="title" x="48" y="68">The rental shop, modeled two ways</text>
+<text class="caption" x="48" y="100">The rule lives in the database: bookings go through one INSERT. Amber: an overlap is refused by the constraint.</text>
+<rect class="actor" x="48" y="316" width="240" height="72" rx="36"/>
+<text class="name" x="168" y="348" text-anchor="middle">Booking requests</text>
+<text class="sub" x="168" y="370" text-anchor="middle">book_cli, race_cli</text>
+<rect class="svc" x="344" y="308" width="200" height="100" rx="12"/>
+<text class="name" x="360" y="340">BookItem</text>
+<text class="sub" x="360" y="364">builds the period,</text>
+<text class="sub" x="360" y="388">inserts, no check</text>
+<rect class="svc" x="592" y="308" width="216" height="100" rx="12"/>
+<text class="name" x="608" y="340">PostgresRentals</text>
+<text class="sub" x="608" y="364">all the SQL,</text>
+<text class="sub" x="608" y="388">23P01 to errors</text>
+<rect class="boundary" x="864" y="132" width="288" height="464" rx="14"/>
+<text class="tag" x="880" y="160">Relational model, PostgreSQL</text>
+<path class="store" d="M880 196a128 12 0 0 1 256 0v64a128 12 0 0 1 -256 0z"/>
+<path class="rim" d="M880 196a128 12 0 0 0 256 0"/>
+<text class="name" x="1008" y="232" text-anchor="middle">Items</text>
+<text class="sub" x="1008" y="256" text-anchor="middle">item_id, daily_rate</text>
+<path class="store" d="M880 340a128 12 0 0 1 256 0v86a128 12 0 0 1 -256 0z"/>
+<path class="rim" d="M880 340a128 12 0 0 0 256 0"/>
+<text class="name" x="1008" y="376" text-anchor="middle">Rentals</text>
+<text class="sub" x="1008" y="400" text-anchor="middle">EXCLUDE item_id =,</text>
+<text class="sub" x="1008" y="422" text-anchor="middle">during &amp;&amp;</text>
+<path class="store" d="M880 500a128 12 0 0 1 256 0v64a128 12 0 0 1 -256 0z"/>
+<path class="rim" d="M880 500a128 12 0 0 0 256 0"/>
+<text class="name" x="1008" y="536" text-anchor="middle">Customers</text>
+<text class="sub" x="1008" y="560" text-anchor="middle">customer_id, name</text>
+<rect class="note" x="344" y="448" width="260" height="90" rx="10"/>
+<text class="label b t-warn" x="360" y="478">make demo</text>
+<text class="sub" x="360" y="504">overlap: 23P01, exit 3</text>
+<rect class="boundary" x="48" y="600" width="592" height="232" rx="14"/>
+<text class="tag" x="64" y="628">Document model (JSONB)</text>
+<path class="store" d="M72 690a120 12 0 0 1 240 0v86a120 12 0 0 1 -240 0z"/>
+<path class="rim" d="M72 690a120 12 0 0 0 240 0"/>
+<text class="name" x="192" y="726" text-anchor="middle">Item document</text>
+<text class="sub" x="192" y="750" text-anchor="middle">embeds the booked</text>
+<text class="sub" x="192" y="772" text-anchor="middle">ranges</text>
+<path class="store" d="M376 690a120 12 0 0 1 240 0v86a120 12 0 0 1 -240 0z"/>
+<path class="rim" d="M376 690a120 12 0 0 0 240 0"/>
+<text class="name" x="496" y="726" text-anchor="middle">Customer document</text>
+<text class="sub" x="496" y="750" text-anchor="middle">embeds the rental</text>
+<text class="sub" x="496" y="772" text-anchor="middle">history</text>
+<path class="sync" d="M288 358H344"/>
+<path class="sync" d="M544 358H592"/>
+<path class="sync" d="M808 380H880"/>
+<path class="read" d="M1008 328V274"/>
+<text class="label" x="1020" y="308">item_id</text>
+<path class="read" d="M1008 438V488"/>
+<text class="label" x="1020" y="470">customer_id</text>
+<path class="fail" d="M880 418H180Q168 418 168 406V388"/>
+<path class="stop" d="M850 406V430"/>
+<text class="label t-warn" x="620" y="438">ItemAlreadyBookedError</text>
+<path class="async" d="M100 388V670"/>
+<text class="label t-accent" x="112" y="520">book, no guard</text>
+<path class="async" d="M312 734H376"/>
+<text class="label t-accent" x="318" y="724">copy</text>
+<path class="sync" d="M48 856H112"/><text class="legend" x="124" y="861">sync call</text>
+<path class="async" d="M264 856H328"/><text class="legend" x="340" y="861">async message</text>
+<path class="read" d="M520 856H584"/><text class="legend" x="596" y="861">read</text>
+<path class="fail" d="M696 856H760"/><text class="legend" x="772" y="861">failure path</text>
+</svg>
